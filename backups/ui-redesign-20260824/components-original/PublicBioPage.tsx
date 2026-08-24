@@ -91,9 +91,9 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
       case 'sharp':
         return 'rounded-none';
       case 'shadow3d':
-        return 'rounded-xl border-2 border-gray-800 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]';
+        return 'rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]';
       case 'glass':
-        return 'rounded-2xl backdrop-blur-md border border-gray-200 shadow-lg';
+        return 'rounded-2xl backdrop-blur-md border border-white/20 shadow-lg';
       case 'outline':
         return 'rounded-xl border-2 bg-transparent';
       case 'rounded':
@@ -102,18 +102,18 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
     }
   };
 
-  // Shadow class for light theme
+  // Shadow class
   const getShadowClass = () => {
     if (theme.buttonStyle === 'shadow3d') return '';
     switch (theme.shadowStyle) {
       case 'hard':
         return 'shadow-md';
       case 'glow':
-        return 'shadow-lg hover:shadow-xl';
+        return 'shadow-[0_0_20px_rgba(255,255,255,0.25)]';
       case 'soft':
         return 'shadow-sm hover:shadow-md';
       default:
-        return 'shadow-md hover:shadow-lg';
+        return '';
     }
   };
 
@@ -121,7 +121,7 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
 
   return (
     <div
-      className="min-h-full w-full flex flex-col items-center justify-between transition-colors duration-300 relative"
+      className="min-h-full w-full flex flex-col items-center justify-between transition-colors duration-300 relative selection:bg-emerald-500 selection:text-white"
       style={{
         background: theme.bgType === 'gradient' ? theme.bgGradient : theme.bgColor,
         color: theme.textColor,
@@ -139,8 +139,8 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
       {/* Top Floating Action Buttons (Share & QR Code) */}
       <div className="w-full max-w-md px-4 pt-4 flex items-center justify-between z-10">
         <div className="flex items-center gap-1.5">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white border-2 border-gray-200 text-gray-700 shadow-md">
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold backdrop-blur-md bg-black/20 text-white/90 border border-white/10">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             Live Bio
           </span>
         </div>
@@ -148,8 +148,8 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
           {onQrClick && (
             <button
               onClick={onQrClick}
-              className="p-2.5 rounded-xl bg-white hover:bg-gray-50 transition-all text-gray-700 border-2 border-gray-200 shadow-md active:scale-95"
-              title="Show QR Code"
+              className="p-2 rounded-full backdrop-blur-md bg-white/15 hover:bg-white/25 transition-all text-white border border-white/15 shadow-sm active:scale-90"
+              title="Tampilkan QR Code"
               aria-label="QR Code"
             >
               <QrCode className="w-4 h-4" />
@@ -158,9 +158,9 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
           {onShareClick && (
             <button
               onClick={onShareClick}
-              className="p-2.5 rounded-xl bg-white hover:bg-gray-50 transition-all text-gray-700 border-2 border-gray-200 shadow-md active:scale-95"
-              title="Share Profile"
-              aria-label="Share Profile"
+              className="p-2 rounded-full backdrop-blur-md bg-white/15 hover:bg-white/25 transition-all text-white border border-white/15 shadow-sm active:scale-90"
+              title="Bagikan Profil"
+              aria-label="Bagikan Profil"
             >
               <Share2 className="w-4 h-4" />
             </button>
@@ -171,17 +171,17 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
       {/* Main Profile Content Container */}
       <div className="w-full max-w-md px-5 py-6 flex-1 flex flex-col items-center z-10">
         {/* Profile Avatar with custom Ring */}
-        <div className="relative group mb-4">
+        <div className="relative group mb-3">
           <div
-            className="w-28 h-28 rounded-full p-1.5 transition-transform duration-300 group-hover:scale-105 bg-white shadow-lg"
+            className="w-24 h-24 rounded-full p-1 transition-transform duration-300 group-hover:scale-105"
             style={{
-              boxShadow: `0 0 0 4px ${theme.avatarRing}`,
+              boxShadow: `0 0 0 3px ${theme.avatarRing}`,
             }}
           >
             <img
               src={profile.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400'}
               alt={profile.displayName}
-              className="w-full h-full object-cover rounded-full bg-gray-100"
+              className="w-full h-full object-cover rounded-full bg-gray-200"
               referrerPolicy="no-referrer"
               onError={(e) => {
                 // Fallback avatar
@@ -191,34 +191,34 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
           </div>
           {profile.verified && (
             <div
-              className="absolute bottom-0 right-0 rounded-full bg-white p-1 shadow-lg flex items-center justify-center text-blue-500 border-2 border-white"
-              title="Verified"
+              className="absolute bottom-0 right-0 rounded-full bg-white p-0.5 shadow-md flex items-center justify-center text-blue-500"
+              title="Terverifikasi"
             >
-              <CheckCircle2 className="w-7 h-7 fill-blue-500 text-white" />
+              <CheckCircle2 className="w-6 h-6 fill-blue-500 text-white" />
             </div>
           )}
         </div>
 
         {/* Display Name & Handle */}
-        <div className="text-center mb-2">
-          <h1 className="text-2xl font-bold tracking-tight flex items-center justify-center gap-1.5">
-            {profile.displayName || 'Profile Name'}
+        <div className="text-center mb-1">
+          <h1 className="text-xl font-bold tracking-tight flex items-center justify-center gap-1.5">
+            {profile.displayName || 'Nama Profil'}
           </h1>
-          <p className="text-sm font-medium opacity-70 mt-1">@{profile.username || 'username'}</p>
+          <p className="text-xs font-medium opacity-75 mt-0.5">@{profile.username || 'username'}</p>
         </div>
 
         {/* Location / Status Badge if enabled */}
         {(profile.statusBadge || profile.location) && (
-          <div className="flex flex-wrap items-center justify-center gap-2 my-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 my-2">
             {profile.statusBadge && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700 border-2 border-amber-200 shadow-sm">
-                <Zap className="w-3.5 h-3.5" />
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-white/15 backdrop-blur-sm border border-white/20 text-current">
+                <Zap className="w-3 h-3 text-amber-400" />
                 {profile.statusBadge}
               </span>
             )}
             {profile.location && (
-              <span className="inline-flex items-center gap-1 text-sm font-medium opacity-75">
-                <MapPin className="w-4 h-4" />
+              <span className="inline-flex items-center gap-1 text-xs opacity-75">
+                <MapPin className="w-3 h-3" />
                 {profile.location}
               </span>
             )}
@@ -228,7 +228,7 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
         {/* Bio Text */}
         {profile.bio && (
           <p
-            className="text-sm sm:text-base text-center max-w-sm leading-relaxed my-3 font-normal"
+            className="text-xs sm:text-sm text-center max-w-xs leading-relaxed my-2.5 font-normal"
             style={{ color: theme.bioColor || 'inherit' }}
           >
             {profile.bio}
@@ -245,13 +245,13 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
         />
 
         {/* Links List */}
-        <div className="w-full space-y-3 mt-5">
+        <div className="w-full space-y-3 mt-4">
           {activeLinks.map((link) => {
             // Header / Section Divider
             if (link.type === 'header') {
               return (
-                <div key={link.id} className="pt-4 pb-2 text-center">
-                  <h2 className="text-xs font-bold uppercase tracking-wider opacity-70 px-4 py-1.5 inline-block rounded-lg bg-white/80 border border-gray-200 shadow-sm">
+                <div key={link.id} className="pt-3 pb-1 text-center">
+                  <h2 className="text-xs font-bold uppercase tracking-wider opacity-85 px-3 py-1 inline-block rounded-md">
                     {link.title}
                   </h2>
                 </div>
@@ -277,7 +277,7 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
                   color: theme.cardText,
                   borderColor: theme.cardBorder,
                 }}
-                className={`group relative w-full p-4 flex items-center justify-between border-2 transition-all duration-200 ${getButtonShapeClass()} ${getShadowClass()} ${animClass} ${
+                className={`group relative w-full p-3.5 flex items-center justify-between border transition-all duration-200 ${getButtonShapeClass()} ${getShadowClass()} ${animClass} ${
                   isClicked ? 'scale-[0.97] opacity-90' : 'hover:scale-[1.02] active:scale-[0.98]'
                 }`}
               >
@@ -285,16 +285,16 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
                 {link.highlight && (
                   <span
                     style={{ backgroundColor: theme.accentColor, color: '#ffffff' }}
-                    className="absolute -top-2.5 right-4 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md flex items-center gap-1 uppercase tracking-wider border-2 border-white"
+                    className="absolute -top-2.5 right-4 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1 uppercase tracking-wider"
                   >
-                    <Flame className="w-3 h-3 fill-white" />
+                    <Flame className="w-2.5 h-2.5 fill-white" />
                     {link.highlightText || 'HOT'}
                   </span>
                 )}
 
                 {/* Left Icon / Thumbnail */}
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className="w-11 h-11 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                  <div className="w-10 h-10 rounded-xl bg-black/10 dark:bg-white/10 flex items-center justify-center shrink-0 overflow-hidden">
                     {link.thumbnailUrl ? (
                       <img
                         src={link.thumbnailUrl}
@@ -309,11 +309,11 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
 
                   {/* Title & Subtitle */}
                   <div className="min-w-0 flex-1 text-left">
-                    <div className="font-bold text-sm leading-snug line-clamp-1 group-hover:underline">
+                    <div className="font-semibold text-sm leading-snug line-clamp-1 group-hover:underline">
                       {link.title}
                     </div>
                     {link.subtitle && (
-                      <div className="text-xs opacity-70 line-clamp-1 mt-1 font-normal">
+                      <div className="text-xs opacity-75 line-clamp-1 mt-0.5 font-normal">
                         {link.subtitle}
                       </div>
                     )}
@@ -321,25 +321,26 @@ export const PublicBioPage: React.FC<PublicBioPageProps> = ({
                 </div>
 
                 {/* Right Arrow / Action Indicator */}
-                <div className="pl-2 shrink-0 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                  <ArrowUpRight className="w-5 h-5" />
+                <div className="pl-2 shrink-0 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
+                  <ArrowUpRight className="w-4 h-4" />
                 </div>
               </a>
             );
           })}
 
           {activeLinks.length === 0 && (
-            <div className="p-10 text-center rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 text-sm opacity-70 shadow-md">
-              No active links yet. Add links in the editor.
+            <div className="p-8 text-center rounded-2xl border border-dashed border-white/20 bg-white/5 text-xs opacity-70">
+              Belum ada tautan aktif. Tambahkan tautan di tab editor.
             </div>
           )}
         </div>
       </div>
 
-      {/* Footer Branding */}
+      {/* Footer Branding & Fast Loading Indicator */}
       <div className="w-full max-w-md px-4 py-4 text-center z-10">
-        <div className="inline-flex items-center gap-1.5 text-xs font-medium opacity-50 hover:opacity-100 transition-opacity">
-          <span>Made with lynkbio</span>
+        <div className="inline-flex items-center gap-1.5 text-[11px] font-medium opacity-60 hover:opacity-100 transition-opacity">
+          <Sparkles className="w-3 h-3 text-emerald-400" />
+          <span>Dibuat dengan lynkbio</span>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Palette,
   Type,
@@ -8,9 +8,10 @@ import {
   Circle,
   Square,
   Layers,
-  Flame,
   Sun,
-  Moon,
+  Droplet,
+  Zap,
+  Heart,
 } from 'lucide-react';
 import { ProfileTheme, UserProfile, ButtonStyle, FontChoice } from '../types';
 import { PRESET_THEMES } from '../data/presets';
@@ -43,13 +44,13 @@ export const AppearanceEditor: React.FC<AppearanceEditorProps> = ({
     });
   };
 
-  const buttonStyles: { id: ButtonStyle; label: string; desc: string }[] = [
-    { id: 'rounded', label: 'Rounded', desc: 'Sudut melengkung modern' },
-    { id: 'pill', label: 'Pill / Kapsul', desc: 'Sudut bulat sempurna' },
-    { id: 'glass', label: 'Glassmorphism', desc: 'Efek kaca transparan & blur' },
-    { id: 'shadow3d', label: '3D Brutalism', desc: 'Border tebal & shadow pop' },
-    { id: 'outline', label: 'Garis Luar', desc: 'Transparan dengan border tegas' },
-    { id: 'sharp', label: 'Kotak Tegas', desc: 'Minimalis persegi tanpa radius' },
+  const buttonStyles: { id: ButtonStyle; label: string; desc: string; icon: any }[] = [
+    { id: 'rounded', label: 'Rounded', desc: 'Modern curves', icon: Circle },
+    { id: 'pill', label: 'Pill', desc: 'Full rounded', icon: Droplet },
+    { id: 'glass', label: 'Glass', desc: 'Blur effect', icon: Sparkles },
+    { id: 'shadow3d', label: '3D', desc: 'Bold shadow', icon: Layers },
+    { id: 'outline', label: 'Outline', desc: 'Border only', icon: Square },
+    { id: 'sharp', label: 'Sharp', desc: 'No radius', icon: Zap },
   ];
 
   const fontOptions: FontChoice[] = [
@@ -62,20 +63,18 @@ export const AppearanceEditor: React.FC<AppearanceEditorProps> = ({
   ];
 
   return (
-    <div className="w-full space-y-6 text-slate-900 font-sans">
-      {/* 1. PRESET THEMES CAROUSEL */}
-      <div className="bg-white p-5 sm:p-7 rounded-3xl border border-slate-200/80 shadow-2xs space-y-4">
+    <div className="w-full space-y-5">
+      {/* Preset Themes */}
+      <div className="bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-lg space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Palette className="w-5 h-5 text-slate-900" />
-            <h3 className="text-base font-bold text-slate-900">
-              Pilihan Tema Siap Pakai
-            </h3>
+            <Palette className="w-5 h-5 text-purple-500" />
+            <h3 className="text-lg font-bold text-gray-900">Ready-to-Use Themes</h3>
           </div>
-          <span className="text-xs text-slate-400 font-medium">1 Klik Terapkan</span>
+          <span className="text-xs text-gray-500 font-medium">Click to apply</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {PRESET_THEMES.map((theme) => {
             const isSelected = currentTheme.id === theme.id;
             return (
@@ -83,25 +82,25 @@ export const AppearanceEditor: React.FC<AppearanceEditorProps> = ({
                 key={theme.id}
                 type="button"
                 onClick={() => handleSelectPresetTheme(theme)}
-                className={`relative p-3 rounded-2xl border text-left transition-all group overflow-hidden ${
+                className={`relative p-4 rounded-2xl border-2 text-left transition-all group ${
                   isSelected
-                    ? 'ring-2 ring-slate-950 border-transparent shadow-xs bg-slate-50'
-                    : 'border-slate-200/80 hover:border-slate-400 bg-white'
+                    ? 'ring-2 ring-green-500 border-green-500 shadow-lg'
+                    : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
                 }`}
               >
-                {/* Mini Theme Preview Canvas */}
+                {/* Theme Preview */}
                 <div
-                  className="w-full h-16 rounded-xl mb-2.5 p-2 flex flex-col justify-between items-center shadow-inner relative overflow-hidden"
+                  className="w-full h-20 rounded-xl mb-3 p-3 flex flex-col justify-between items-center shadow-inner relative overflow-hidden"
                   style={{
                     background: theme.bgType === 'gradient' ? theme.bgGradient : theme.bgColor,
                   }}
                 >
                   <div
-                    className="w-4 h-4 rounded-full border border-white/40 shadow-xs"
+                    className="w-6 h-6 rounded-full border-2 border-white/40 shadow-sm"
                     style={{ backgroundColor: theme.avatarRing }}
                   />
                   <div
-                    className="w-3/4 h-2.5 rounded border"
+                    className="w-full h-3 rounded-lg border"
                     style={{
                       backgroundColor: theme.cardBg,
                       borderColor: theme.cardBorder,
@@ -109,19 +108,17 @@ export const AppearanceEditor: React.FC<AppearanceEditorProps> = ({
                   />
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="text-xs font-bold text-slate-900 truncate">
-                    {theme.name}
-                  </div>
+                <div className="flex items-center justify-between mb-1">
+                  <div className="text-sm font-bold text-gray-900 truncate">{theme.name}</div>
                   {isSelected && (
-                    <span className="w-4 h-4 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px]">
-                      <Check className="w-2.5 h-2.5" />
-                    </span>
+                    <div className="w-5 h-5 rounded-full bg-green-500 text-white flex items-center justify-center">
+                      <Check className="w-3 h-3" />
+                    </div>
                   )}
                 </div>
 
                 {theme.badge && (
-                  <span className="text-[10px] text-slate-400 font-medium">
+                  <span className="inline-block text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-semibold">
                     {theme.badge}
                   </span>
                 )}
@@ -131,157 +128,231 @@ export const AppearanceEditor: React.FC<AppearanceEditorProps> = ({
         </div>
       </div>
 
-      {/* 2. CUSTOM BACKGROUND & ACCENT */}
-      <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-5">
+      {/* Custom Colors */}
+      <div className="bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-lg space-y-5">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-slate-900" />
-          <h3 className="text-base font-bold text-slate-900">
-            Kustomisasi Warna & Latar Belakang
-          </h3>
+          <Sparkles className="w-5 h-5 text-orange-500" />
+          <h3 className="text-lg font-bold text-gray-900">Custom Colors</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Background Color / Style */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700">Warna Latar (Background)</label>
+          {/* Background Color */}
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-gray-700">Background Color</label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
                 value={currentTheme.bgColor}
                 onChange={(e) => handleUpdateTheme({ bgColor: e.target.value, bgType: 'solid' })}
-                className="w-10 h-10 rounded-xl cursor-pointer border border-slate-200 bg-transparent p-0.5"
+                className="w-12 h-12 rounded-xl border-2 border-gray-200 cursor-pointer"
               />
               <input
                 type="text"
                 value={currentTheme.bgColor}
-                onChange={(e) => handleUpdateTheme({ bgColor: e.target.value, bgType: 'solid' })}
-                className="flex-1 px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl uppercase font-mono text-slate-900 focus:outline-none focus:border-slate-900"
+                onChange={(e) => handleUpdateTheme({ bgColor: e.target.value })}
+                className="flex-1 px-3 py-2.5 text-sm bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none font-mono"
+              />
+            </div>
+          </div>
+
+          {/* Accent Color */}
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-gray-700">Accent Color</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="color"
+                value={currentTheme.accentColor}
+                onChange={(e) => handleUpdateTheme({ accentColor: e.target.value })}
+                className="w-12 h-12 rounded-xl border-2 border-gray-200 cursor-pointer"
+              />
+              <input
+                type="text"
+                value={currentTheme.accentColor}
+                onChange={(e) => handleUpdateTheme({ accentColor: e.target.value })}
+                className="flex-1 px-3 py-2.5 text-sm bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none font-mono"
               />
             </div>
           </div>
 
           {/* Text Color */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700">Warna Teks Utama</label>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-gray-700">Text Color</label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
                 value={currentTheme.textColor}
                 onChange={(e) => handleUpdateTheme({ textColor: e.target.value })}
-                className="w-10 h-10 rounded-xl cursor-pointer border border-slate-200 bg-transparent p-0.5"
+                className="w-12 h-12 rounded-xl border-2 border-gray-200 cursor-pointer"
               />
               <input
                 type="text"
                 value={currentTheme.textColor}
                 onChange={(e) => handleUpdateTheme({ textColor: e.target.value })}
-                className="flex-1 px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl uppercase font-mono text-slate-900 focus:outline-none focus:border-slate-900"
+                className="flex-1 px-3 py-2.5 text-sm bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none font-mono"
               />
             </div>
           </div>
 
-          {/* Card Fill Color */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700">Warna Kotak Tautan (Card Bg)</label>
+          {/* Card Background */}
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-gray-700">Card Background</label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
-                value={currentTheme.cardBg.startsWith('#') ? currentTheme.cardBg : '#ffffff'}
+                value={currentTheme.cardBg}
                 onChange={(e) => handleUpdateTheme({ cardBg: e.target.value })}
-                className="w-10 h-10 rounded-xl cursor-pointer border border-slate-200 bg-transparent p-0.5"
+                className="w-12 h-12 rounded-xl border-2 border-gray-200 cursor-pointer"
               />
               <input
                 type="text"
                 value={currentTheme.cardBg}
                 onChange={(e) => handleUpdateTheme({ cardBg: e.target.value })}
-                className="flex-1 px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-900 focus:outline-none focus:border-slate-900"
-              />
-            </div>
-          </div>
-
-          {/* Accent / Highlight Color */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700">Warna Aksen / Badge</label>
-            <div className="flex items-center gap-2">
-              <input
-                type="color"
-                value={currentTheme.accentColor}
-                onChange={(e) => handleUpdateTheme({ accentColor: e.target.value })}
-                className="w-10 h-10 rounded-xl cursor-pointer border border-slate-200 bg-transparent p-0.5"
-              />
-              <input
-                type="text"
-                value={currentTheme.accentColor}
-                onChange={(e) => handleUpdateTheme({ accentColor: e.target.value })}
-                className="flex-1 px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl uppercase font-mono text-slate-900 focus:outline-none focus:border-slate-900"
+                className="flex-1 px-3 py-2.5 text-sm bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none font-mono"
               />
             </div>
           </div>
         </div>
+
+        {/* Gradient Background Option */}
+        <div className="pt-4 border-t-2 border-gray-100">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={currentTheme.bgType === 'gradient'}
+              onChange={(e) =>
+                handleUpdateTheme({
+                  bgType: e.target.checked ? 'gradient' : 'solid',
+                })
+              }
+              className="rounded border-gray-300 text-green-500 focus:ring-green-500"
+            />
+            <span className="text-sm font-semibold text-gray-700">Use Gradient Background</span>
+          </label>
+
+          {currentTheme.bgType === 'gradient' && (
+            <div className="mt-3">
+              <input
+                type="text"
+                value={currentTheme.bgGradient || ''}
+                onChange={(e) => handleUpdateTheme({ bgGradient: e.target.value })}
+                placeholder="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                className="w-full px-3 py-2.5 text-sm bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none font-mono"
+              />
+              <p className="text-xs text-gray-500 mt-1.5">
+                Use CSS gradient syntax (e.g., linear-gradient, radial-gradient)
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* 3. BUTTON STYLE & SHAPE */}
-      <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+      {/* Button Style */}
+      <div className="bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-lg space-y-4">
         <div className="flex items-center gap-2">
-          <LayoutTemplate className="w-5 h-5 text-slate-900" />
-          <h3 className="text-base font-bold text-slate-900">
-            Bentuk & Gaya Tombol
-          </h3>
+          <LayoutTemplate className="w-5 h-5 text-blue-500" />
+          <h3 className="text-lg font-bold text-gray-900">Button Style</h3>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {buttonStyles.map((style) => {
             const isSelected = currentTheme.buttonStyle === style.id;
+            const Icon = style.icon;
             return (
               <button
                 key={style.id}
-                type="button"
                 onClick={() => handleUpdateTheme({ buttonStyle: style.id })}
-                className={`p-3.5 rounded-2xl border text-left transition-all ${
+                className={`p-4 rounded-2xl border-2 text-left transition-all ${
                   isSelected
-                    ? 'border-slate-900 bg-slate-50 ring-1 ring-slate-900'
-                    : 'border-slate-200/80 hover:border-slate-400 bg-white'
+                    ? 'border-green-500 bg-green-50 ring-2 ring-green-500'
+                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                 }`}
               >
-                <div className="font-bold text-xs text-slate-900">
-                  {style.label}
+                <div className="flex items-center justify-between mb-2">
+                  <Icon className={`w-5 h-5 ${isSelected ? 'text-green-600' : 'text-gray-400'}`} />
+                  {isSelected && (
+                    <div className="w-5 h-5 rounded-full bg-green-500 text-white flex items-center justify-center">
+                      <Check className="w-3 h-3" />
+                    </div>
+                  )}
                 </div>
-                <div className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-                  {style.desc}
-                </div>
+                <p className="text-sm font-bold text-gray-900">{style.label}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{style.desc}</p>
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* 4. TYPOGRAPHY / FONT */}
-      <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+      {/* Font Family */}
+      <div className="bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-lg space-y-4">
         <div className="flex items-center gap-2">
-          <Type className="w-5 h-5 text-slate-900" />
-          <h3 className="text-base font-bold text-slate-900">
-            Pilihan Tipografi & Font
-          </h3>
+          <Type className="w-5 h-5 text-pink-500" />
+          <h3 className="text-lg font-bold text-gray-900">Font Family</h3>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {fontOptions.map((font) => {
             const isSelected = currentTheme.fontFamily === font;
             return (
               <button
                 key={font}
-                type="button"
                 onClick={() => handleUpdateTheme({ fontFamily: font })}
-                style={{ fontFamily: font }}
-                className={`p-3 rounded-2xl border text-center transition-all ${
+                className={`p-4 rounded-2xl border-2 text-left transition-all ${
                   isSelected
-                    ? 'border-slate-900 bg-slate-50 ring-1 ring-slate-900 font-bold'
-                    : 'border-slate-200/80 hover:border-slate-400 bg-white'
+                    ? 'border-green-500 bg-green-50 ring-2 ring-green-500'
+                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                 }`}
+                style={{ fontFamily: font }}
               >
-                <span className="text-sm">{font}</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-gray-900">{font}</span>
+                  {isSelected && (
+                    <div className="w-5 h-5 rounded-full bg-green-500 text-white flex items-center justify-center">
+                      <Check className="w-3 h-3" />
+                    </div>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500 mt-1">The quick brown fox jumps</p>
               </button>
             );
           })}
+        </div>
+      </div>
+
+      {/* Quick Presets */}
+      <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl border-2 border-purple-200 space-y-3">
+        <div className="flex items-center gap-2">
+          <Heart className="w-5 h-5 text-purple-500" />
+          <h3 className="text-lg font-bold text-gray-900">Quick Color Presets</h3>
+        </div>
+        <p className="text-sm text-gray-600">Popular color combinations</p>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[
+            { name: 'Mint Fresh', bg: '#d1f4e0', accent: '#10b981' },
+            { name: 'Ocean Blue', bg: '#dbeafe', accent: '#3b82f6' },
+            { name: 'Sunset Pink', bg: '#fce7f3', accent: '#ec4899' },
+            { name: 'Lavender', bg: '#f3e8ff', accent: '#a855f7' },
+          ].map((preset) => (
+            <button
+              key={preset.name}
+              onClick={() =>
+                handleUpdateTheme({
+                  bgColor: preset.bg,
+                  accentColor: preset.accent,
+                  bgType: 'solid',
+                })
+              }
+              className="p-3 rounded-xl border-2 border-gray-200 hover:border-gray-300 transition-all text-center group"
+              style={{ backgroundColor: preset.bg }}
+            >
+              <div
+                className="w-8 h-8 rounded-full mx-auto mb-2 border-2 border-white shadow-sm"
+                style={{ backgroundColor: preset.accent }}
+              />
+              <p className="text-xs font-bold text-gray-900">{preset.name}</p>
+            </button>
+          ))}
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import {
   Wifi,
   Battery,
   RotateCw,
+  Signal,
 } from 'lucide-react';
 import { UserProfile, BioLink } from '../types';
 import { PublicBioPage } from './PublicBioPage';
@@ -39,92 +40,106 @@ export const MobileSimulator: React.FC<MobileSimulatorProps> = ({
   };
 
   const handleRefresh = () => {
-    setRefreshKey(prev => prev + 1);
+    setRefreshKey((prev) => prev + 1);
   };
 
   return (
-    <div className="w-full max-w-[400px] flex flex-col justify-center items-center bg-slate-200/50 rounded-[48px] border-8 border-white shadow-inner p-4">
-      {/* Top Simulator Control Bar */}
-      <div className="w-full flex items-center justify-between gap-2 mb-3 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm text-xs">
-        <div className="flex items-center gap-2 min-w-0 flex-1 px-1">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-semibold truncate text-slate-700">
-            linkbio.to/{profile.username || 'user'}
-          </span>
-        </div>
+    <div className="w-full max-w-[420px] flex flex-col items-center">
+      {/* Control Bar */}
+      <div className="w-full mb-4 p-3 bg-white rounded-2xl border-2 border-gray-200 shadow-sm">
+        <div className="flex items-center justify-between gap-3">
+          {/* URL Display */}
+          <div className="flex items-center gap-2 flex-1 min-w-0 px-3 py-2 bg-gray-50 rounded-xl border border-gray-200">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shrink-0" />
+            <span className="text-xs font-mono text-gray-600 truncate">
+              lynkbio.to/@{profile.username || 'user'}
+            </span>
+          </div>
 
-        <div className="flex items-center gap-1 shrink-0">
-          <button
-            onClick={handleCopy}
-            className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-500 transition-colors"
-            title="Salin Tautan Bio"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-          </button>
-          <button
-            onClick={onOpenQr}
-            className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-500 transition-colors"
-            title="QR Code"
-          >
-            <QrCode className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={handleRefresh}
-            className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-500 transition-colors"
-            title="Muat Ulang Preview"
-          >
-            <RotateCw className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={onOpenFullPreview}
-            className="p-1.5 px-2.5 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 transition-opacity flex items-center gap-1 shadow-xs"
-            title="Buka Layar Penuh"
-          >
-            <ExternalLink className="w-3 h-3" />
-            <span className="text-[10px]">Preview</span>
-          </button>
+          {/* Action Buttons */}
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              onClick={handleCopy}
+              className="p-2 rounded-lg hover:bg-gray-100 text-gray-600 hover:text-gray-900 transition-colors"
+              title="Copy Link"
+            >
+              {copied ? (
+                <Check className="w-4 h-4 text-green-500" />
+              ) : (
+                <Copy className="w-4 h-4" />
+              )}
+            </button>
+            <button
+              onClick={handleRefresh}
+              className="p-2 rounded-lg hover:bg-gray-100 text-gray-600 hover:text-gray-900 transition-colors"
+              title="Refresh"
+            >
+              <RotateCw className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onOpenFullPreview}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold text-xs transition-colors"
+              title="Full Preview"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>Preview</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Realistic Minimalist Phone Mockup Frame */}
-      <div className="w-[310px] sm:w-[330px] h-[620px] bg-white rounded-[42px] shadow-2xl border-[6px] border-slate-900 flex flex-col items-center overflow-hidden relative select-none">
-        {/* Dynamic Island / Top Camera Pill */}
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 w-24 h-4 bg-slate-900 rounded-full z-30 flex items-center justify-end px-2 pointer-events-none">
-          <div className="w-2 h-2 rounded-full bg-slate-800" />
-        </div>
+      {/* Phone Mockup */}
+      <div className="relative">
+        {/* Phone Frame */}
+        <div className="relative bg-gray-900 rounded-[3.5rem] p-3 shadow-2xl">
+          {/* Inner bezel */}
+          <div className="relative bg-white rounded-[3rem] overflow-hidden">
+            {/* Dynamic Island */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-8 bg-black rounded-b-3xl z-50 flex items-center justify-end px-3 gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-gray-800" />
+              <div className="w-2 h-2 rounded-full bg-gray-700" />
+            </div>
 
-        {/* Screen Container */}
-        <div className="w-full h-full rounded-[36px] overflow-hidden bg-slate-50 flex flex-col relative">
-          {/* Mock Status Bar */}
-          <div className="w-full h-8 pt-2 px-6 flex items-center justify-between text-[10px] font-bold text-slate-800 z-20 pointer-events-none select-none">
-            <span>9:41</span>
-            <div className="flex items-center gap-1.5">
-              <Wifi className="w-3 h-3 text-slate-800" />
-              <Battery className="w-3.5 h-3.5 text-slate-800" />
+            {/* Screen Content Container */}
+            <div className="relative w-[340px] h-[680px] bg-white rounded-[2.75rem] overflow-hidden flex flex-col">
+              {/* Status Bar */}
+              <div className="absolute top-0 left-0 right-0 h-12 pt-2 px-8 flex items-center justify-between text-[11px] font-semibold text-gray-900 z-40 bg-gradient-to-b from-white to-transparent">
+                <span>9:41</span>
+                <div className="flex items-center gap-1">
+                  <Signal className="w-3.5 h-3.5" />
+                  <Wifi className="w-3.5 h-3.5" />
+                  <Battery className="w-4 h-4" />
+                </div>
+              </div>
+
+              {/* Scrollable Bio Content */}
+              <div
+                key={refreshKey}
+                className="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar pt-12"
+              >
+                <PublicBioPage
+                  profile={profile}
+                  links={links}
+                  onShareClick={onOpenShare}
+                  onQrClick={onOpenQr}
+                  isSimulated={true}
+                />
+              </div>
+
+              {/* Home Indicator */}
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-gray-900/30 rounded-full z-40" />
             </div>
           </div>
+        </div>
 
-          {/* Scrollable Live Bio Content */}
-          <div
-            key={refreshKey}
-            className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-none relative"
-          >
-            <PublicBioPage
-              profile={profile}
-              links={links}
-              onShareClick={onOpenShare}
-              onQrClick={onOpenQr}
-              isSimulated={true}
-            />
-          </div>
-
-          {/* Home indicator bar */}
-          <div className="w-full h-3 bg-transparent flex items-center justify-center pointer-events-none absolute bottom-1 left-0 z-20">
-            <div className="w-28 h-1 bg-slate-400/60 rounded-full" />
-          </div>
+        {/* Floating Label */}
+        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 bg-white rounded-full border-2 border-gray-200 shadow-lg whitespace-nowrap">
+          <Smartphone className="w-3.5 h-3.5 text-green-500" />
+          <span className="text-xs font-semibold text-gray-700">Live Preview</span>
         </div>
       </div>
-      <p className="mt-3 text-[10px] text-slate-400 font-bold uppercase tracking-widest">Mobile Preview (Actual View)</p>
+
+      <div className="h-10" />
     </div>
   );
 };
