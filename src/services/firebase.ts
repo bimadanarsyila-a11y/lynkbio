@@ -22,6 +22,11 @@ import {
 } from 'firebase/firestore';
 import { AuthUser, RegisteredUserRecord, Workspace } from '../types';
 
+// Force Vite to include signInWithPopup in production bundle
+if (typeof window !== 'undefined') {
+  (window as any).__FIREBASE_DEPS__ = { signInWithPopup, GoogleAuthProvider };
+}
+
 const firebaseConfig = {
   apiKey: "AIzaSyC5v7EGKh_3FD-4bYa_OKFKM5YJ0v4xDeg",
   authDomain: "evident-mercury-w8chg.firebaseapp.com",
