@@ -20,16 +20,15 @@ import {
   where,
   deleteDoc,
 } from 'firebase/firestore';
-import firebaseConfigJson from '../../firebase-applet-config.json';
 import { AuthUser, RegisteredUserRecord, Workspace } from '../types';
 
 const firebaseConfig = {
-  apiKey: firebaseConfigJson.apiKey,
-  authDomain: firebaseConfigJson.authDomain,
-  projectId: firebaseConfigJson.projectId,
-  storageBucket: firebaseConfigJson.storageBucket,
-  messagingSenderId: firebaseConfigJson.messagingSenderId,
-  appId: firebaseConfigJson.appId,
+  apiKey: "AIzaSyC5v7EGKh_3FD-4bYa_OKFKM5YJ0v4xDeg",
+  authDomain: "evident-mercury-w8chg.firebaseapp.com",
+  projectId: "evident-mercury-w8chg",
+  storageBucket: "evident-mercury-w8chg.firebasestorage.app",
+  messagingSenderId: "1020302552716",
+  appId: "1:1020302552716:web:083c5c7f6c913fbc6355a9",
 };
 
 // Initialize Firebase App
@@ -40,10 +39,8 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-// Initialize Firestore with custom database ID if available
-export const db = firebaseConfigJson.firestoreDatabaseId && firebaseConfigJson.firestoreDatabaseId !== '(default)'
-  ? getFirestore(app, firebaseConfigJson.firestoreDatabaseId)
-  : getFirestore(app);
+// Initialize Firestore with custom database ID
+export const db = getFirestore(app, 'ai-studio-linkbiostudio-ba2e20b5-cc33-47b3-bacb-5db7916569b9');
 
 // Auth Helpers
 export const signInWithGoogle = async (): Promise<AuthUser> => {
