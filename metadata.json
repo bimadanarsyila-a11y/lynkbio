@@ -1,0 +1,8 @@
+{
+  "name": "lynkbio",
+  "description": "Platform bio link modern LynkBio dengan integrasi Login Gmail, manajemen multi-project workspace, kustomisasi profil & tema interaktif, serta analitik klik real-time.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
